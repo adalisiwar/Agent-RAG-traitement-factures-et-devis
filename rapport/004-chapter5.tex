@@ -1,0 +1,34 @@
+\chapter{Realisation de l'agent RAG final}
+\label{chap:agent-rag-final}
+
+\section{Refactoring modulaire}
+
+Le sprint final a transforme les scripts existants en une architecture plus claire et plus maintenable. Le code a ete reorganise en plusieurs modules:
+
+\begin{itemize}
+  \item \texttt{db\_utils.py}: gestion de la connexion Postgres avec une logique plus resiliente.
+  \item \texttt{llm\_utils.py}: appels au modele Gemini avec retry et backoff.
+  \item \texttt{rag\_search.py}: recherche hybride, filtres structures et fusion RRF.
+  \item \texttt{rag\_reporting.py}: generation des rapports Excel, graphiques et HTML.
+  \item \texttt{rag\_agent.py}: orchestration generale entre recherche, generation et reporting.
+\end{itemize}
+
+Cette separation a reduit le couplage entre les parties du projet. Elle rend aussi les erreurs plus faciles a localiser: une erreur de connexion, une erreur de recherche et une erreur de generation ne sont plus melangees dans un seul script.
+
+\section{Generation de reponses groundees}
+
+L'agent utilise Gemini \texttt{gemini-3.6-flash} pour produire des reponses en langage naturel. La consigne principale donnee au modele est de repondre uniquement a partir des documents recuperes par la recherche. Lorsque l'information demandee n'est pas presente, l'agent doit le signaler explicitement.
+
+Ce comportement est important pour un agent de facturation. Une reponse agreable mais non verifiee serait dangereuse, car elle pourrait inventer un montant, un fournisseur ou un statut de paiement. Le RAG sert donc a encadrer la generation par des donnees retrouvees.
+
+\section{Reporting automatique}
+
+Le module \texttt{rag\_reporting.py} ajoute une capacite de reporting. L'agent detecte certaines intentions par mots-cles, puis execute des requetes SQL avec \texttt{GROUP BY} pour produire des agregations. Les resultats sont exportes dans un fichier Excel stylise avec \texttt{openpyxl}.
+
+Un graphique est genere avec \texttt{matplotlib}. Pour garder une lecture claire, les categories sont regroupees avec une logique \textit{Top 8 + Autres}. Le rapport HTML final est auto-contenu et inclut une synthese redigee par le LLM.
+
+\section{Orchestration globale}
+
+Le role de \texttt{rag\_agent.py} est de coordonner les differents composants. Il recoit la question utilisateur, identifie s'il s'agit d'une demande de recherche ou de reporting, appelle le bon module, puis retourne une reponse exploitable.
+
+Cette organisation rend l'agent plus proche d'un outil utilisable que d'un simple prototype. Elle permet d'ajouter de nouvelles intentions, de nouveaux filtres ou de nouveaux formats de rapport sans reecrire tout le pipeline.

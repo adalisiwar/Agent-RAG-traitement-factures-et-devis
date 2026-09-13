@@ -1,0 +1,122 @@
+% @Author: Jacem Chaieb
+% @Date:   2015-07-26 13:42:06
+% @Last Modified by:   Jacem Chaieb
+% @Last Modified time: 2016-04-12 15:23:40
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only edit this file for fine tuning to your own needs/liking
+% There isn't really much to edit here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\thispagestyle{empty}
+\begin{titlepage}
+\begin{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+  \fontsize{9pt}{9pt}\selectfont%
+  \begin{tabularx}{\textwidth}{ @{} p{0.4\textwidth} @{} m{0.2\textwidth} @{} p{0.4\textwidth} @{} }
+    %
+    %
+    %
+    % Line 1
+    \centering%
+    Republique Tunisienne\\%
+    Ministere de l'Enseignement Superieur %
+    et de la Recherche Scientifique\\%
+    &%
+    % Column 2
+    \centering%
+    \multirow{2}{\linewidth}{%
+      \centering%
+      \includegraphics[width=2.5cm, height=2.5cm]{logo-enis.pdf}%
+    }%
+    &%
+    % Column 3
+    \centering%
+    \studyDepartment%
+    % Engineering Education Computer Engineering and Applied Mathematics Discipline%
+    % Cycle de Formation d'Ingénieurs dans la Discipline Génie \studyDepartment%
+    \tabularnewline%
+    %
+    %
+    %
+    % Line 2
+    \centering%
+    %\rule{2cm}{0.75pt}\\
+    Universite de Sfax\\
+    \ENIS{}
+    &%
+    % Column 2 is empty (contains the ENIS logo)
+    &%
+    % Column 3
+    \centering%
+    \textbf{%
+    ST-EN07/00\\%
+    \reportTitle{}\\%
+    Numero: \codePFE%
+    }
+    \tabularnewline%
+    \arrayrulecolor{reportType}%
+    \specialrule{0.75pt}{2pt}{0pt}%
+    \specialrule{2.00pt}{1pt}{0pt}%
+  \end{tabularx}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE PAGE CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{30pt} {%
+  \renewcommand*{\familydefault}{\defaultFont}
+  \fontsize{46pt}{46pt}\selectfont%
+  \reportTitle{}\\%
+}
+
+\vspace{30pt}%
+\textbf{\textit{presente a}}\\
+
+\vspace{10pt}
+\ENIS{}\\
+(\studyDepartment)\\
+
+\vspace{30pt}
+\textbf{\textit{dans le cadre de la formation}}\\
+
+\vspace{10pt}
+Cycle Ingenieur en Genie Informatique\\
+%du Diplôme National d'Ingénieur en Génie \studyDepartment\\
+
+\vspace{30pt}
+\textbf{\textit{par}}\\
+\vspace{10pt} {%
+  \fontsize{18pt}{18pt}\selectfont%
+  \textbf{\reportAuthor}\\
+}%
+
+\vspace{10pt} {%
+  \renewcommand*{\familydefault}{\defaultFont}
+  \fontsize{27pt}{27pt}\selectfont%
+  \HRule%
+  \vspace{10pt}
+  \reportSubject{}\\%
+  \vspace{10pt}
+  \HRule%
+}
+
+\vspace{10pt}
+Soutenu le~\dateSoutenance~devant la commission composee de\\
+\vspace{20pt}
+\begin{tabular}{p{0.3\linewidth} p{0.15\linewidth}}
+  \juryPresident{} & \juryPresidentDesc{}\\
+  \juryMemberOne{} & \juryMemberOneDesc{}\\
+  \juryMemberTwo{} & \juryMemberTwoDesc{}\\
+\end{tabular}
+
+\vfill
+
+\end{center}
+\end{titlepage}

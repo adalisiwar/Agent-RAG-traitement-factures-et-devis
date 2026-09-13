@@ -1,0 +1,38 @@
+\chapter{Difficultes rencontrees et solutions apportees}
+\label{chap:difficultes}
+
+\section{Coupure de connexion Neon}
+
+Une difficulte importante est apparue lors du traitement d'un volume plus grand de documents. Apres environ 45 documents, la connexion a la base Neon se coupait. Le probleme ne venait pas d'une seule requete SQL, mais de la stabilite de la connexion pendant un traitement long.
+
+La correction a consiste a rendre la connexion plus resiliente dans \texttt{db\_utils.py}. Des options de keepalive TCP ont ete ajoutees afin de maintenir la connexion active. Une logique de retry a egalement ete mise en place pour relancer proprement certaines operations apres une interruption transitoire.
+
+\section{Quota Gemini depasse}
+
+Pendant les tests d'embeddings et de generation, le quota gratuit Gemini a ete atteint. Le message d'erreur correspondait a un code \texttt{429}. Cette erreur pouvait signifier deux situations differentes: un rate-limit temporaire ou un quota journalier reellement epuise.
+
+La solution a ete d'ajouter dans \texttt{llm\_utils.py} une gestion plus fine du retry et du backoff. Les erreurs transitoires sont relancees apres attente progressive, tandis que les erreurs de quota journalier sont identifiees pour eviter de repeter inutilement des appels voues a echouer.
+
+\section{Depreciation du modele}
+
+Le projet a aussi ete touche par la depreciation du modele \texttt{gemini-2.5-flash}. Cette situation a montre qu'une dependance a un service IA externe doit etre isolee dans le code. Si le nom du modele est disperse dans plusieurs scripts, chaque changement devient fragile.
+
+Le refactoring a donc centralise les appels LLM afin de remplacer plus facilement le modele par \texttt{gemini-3.6-flash}. Cette correction a rendu le projet plus maintenable.
+
+\section{Problemes de types numeriques}
+
+Un bug est apparu lors du traitement des colonnes \texttt{NUMERIC} de Postgres. Python retournait certaines valeurs sous forme de \texttt{Decimal}, alors que d'autres calculs ou visualisations utilisaient des \texttt{float}. Le melange des deux types pouvait provoquer des erreurs ou des conversions implicites non souhaitees.
+
+La correction a consiste a normaliser les conversions au moment opportun, surtout avant la generation de graphiques et l'export des rapports. Les montants financiers restent stockes avec une precision adaptee dans Postgres, puis sont convertis uniquement pour l'affichage ou les traitements qui l'exigent.
+
+\section{Parametres SQL dans les CTE}
+
+Une erreur plus subtile a concerne une requete SQL avec plusieurs CTE. Les parametres positionnels devenaient difficiles a maintenir, car le meme filtre pouvait etre utilise dans plusieurs parties de la requete. Une modification locale risquait alors de casser l'ordre des parametres.
+
+La solution a ete de passer a des parametres nommes. Cette correction a rendu les requetes plus lisibles et plus sures, en particulier dans le module de reporting.
+
+\section{Erreurs Dataverse et Power Automate}
+
+Dans l'integration Power Platform, l'erreur \texttt{ODataUnrecognizedPathException} a ete provoquee par un mauvais mapping du champ \texttt{Owner}. Une autre erreur venait d'une confusion entre UUID et URL OData. Ces problemes ont ete resolus en separant les identifiants internes Postgres des references attendues par Dataverse.
+
+La derniere difficulte concernait la precision monetaire. Dataverse arrondissait certaines colonnes \texttt{Currency} a 0 decimale, alors que Postgres utilisait \texttt{NUMERIC(14,2)}. Cette difference a impose une verification des types et de la precision dans les deux systemes.

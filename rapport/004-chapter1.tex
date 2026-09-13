@@ -1,0 +1,26 @@
+\chapter{Notions theoriques}
+\label{chap:notions-theoriques}
+
+\section{Traitement intelligent de documents}
+
+Le traitement intelligent de documents, ou IDP, designe l'ensemble des techniques qui permettent de transformer un document non directement exploitable par un systeme informatique en donnees structurees. Dans le cas d'une facture, le document peut etre un PDF, une image scannee ou une photo. Pour un humain, lire le fournisseur, la date ou le total est naturel. Pour une application, il faut d'abord reconnaitre le texte, comprendre la disposition du document, associer les libelles aux bonnes valeurs et verifier que le resultat est coherent.
+
+Un pipeline IDP commence souvent par une etape d'OCR, qui convertit les zones visuelles en texte. Cette etape ne suffit pas toujours, car une facture n'est pas seulement une suite de mots. Elle contient une structure: en-tete, tableau de lignes, totaux, taxes, informations client et fournisseur. L'extraction consiste donc a identifier les champs utiles et a les rattacher a un modele de donnees.
+
+Dans ce stage, l'IDP a ete utilise pour automatiser la lecture de factures et de devis. Les informations extraites ont ensuite ete validees, enrichies et stockees dans Postgres. L'interet principal est de reduire la saisie manuelle tout en gardant une trace des incertitudes grace a des scores de confiance.
+
+\section{Recherche augmentee par generation}
+
+Le RAG, ou \textit{Retrieval-Augmented Generation}, peut etre compris comme une facon de donner une memoire fiable a un modele de langage. Un modele generatif seul peut produire une reponse fluide, mais il ne connait pas forcement les donnees internes de l'entreprise. Avec une approche RAG, on commence par rechercher les documents ou enregistrements pertinents, puis on demande au modele de repondre uniquement a partir de ces elements.
+
+Une analogie simple consiste a imaginer un assistant qui ne repond pas de memoire, mais qui ouvre d'abord le bon classeur, lit les pages utiles, puis formule une reponse claire. Si l'information n'est pas presente dans les documents recuperes, l'assistant doit le dire explicitement au lieu de deviner.
+
+Dans ce projet, le RAG repose sur des embeddings, c'est-a-dire des representations numeriques du contenu textuel. Chaque document est transforme en vecteur, puis stocke dans Postgres avec l'extension pgvector. Lorsqu'un utilisateur pose une question, celle-ci est egalement transformee en vecteur afin de retrouver les documents semantiquement proches.
+
+\section{Recherche hybride et grounding}
+
+La recherche vectorielle est utile pour retrouver des documents proches par le sens. Cependant, elle n'est pas toujours suffisante pour les filtres precis comme une annee, un fournisseur ou un statut de paiement. Pour cette raison, le moteur implemente combine deux approches: la recherche vectorielle et la recherche textuelle PostgreSQL.
+
+Les resultats sont fusionnes avec la methode RRF, \textit{Reciprocal Rank Fusion}. Cette strategie privilegie les documents qui apparaissent bien classes dans plusieurs listes de resultats. Elle permet d'obtenir un classement plus stable qu'une seule methode de recherche.
+
+Le grounding des reponses designe le fait que la generation du LLM reste attachee aux donnees retrouvees. Dans le cadre du stage, Gemini est utilise pour rediger une reponse finale, mais cette reponse doit etre limitee aux documents recuperes par le moteur RAG. Ce principe est important dans un contexte financier, car une facture ou un montant ne doit pas etre invente.

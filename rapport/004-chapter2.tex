@@ -1,0 +1,34 @@
+\chapter{Demarche et methodologie}
+\label{chap:demarche-methodologie}
+
+\section{Objectif de comparaison}
+
+Avant de construire le pipeline final, une phase de comparaison a ete necessaire pour choisir l'approche d'extraction la plus adaptee. Trois pistes ont ete etudiees: Power Automate comme solution low-code d'orchestration, AI Builder comme service d'extraction integre a Power Platform, et Azure Document Intelligence comme service specialise dans l'analyse de documents.
+
+Le choix ne dependait pas seulement de la qualite d'extraction. Il fallait aussi prendre en compte l'integration avec l'environnement cible, le cout, la facilite de maintenance, la disponibilite des connecteurs et la capacite a alimenter une base Postgres Neon.
+
+\section{Criteres utilises}
+
+Les criteres retenus etaient les suivants:
+
+\begin{itemize}
+  \item \textbf{Fiabilite}: capacite a extraire correctement les champs importants comme le montant, la date, le fournisseur et les lignes de document.
+  \item \textbf{Cout}: impact des licences, limites d'utilisation et dependance aux quotas.
+  \item \textbf{Complexite d'integration}: facilite de connexion avec Postgres, Dataverse, Power Apps et les traitements Python.
+  \item \textbf{Maintenabilite}: possibilite de corriger les erreurs, surveiller le pipeline et faire evoluer le modele.
+  \item \textbf{Controle technique}: niveau de liberte pour gerer les schemas, les erreurs, les scores de confiance et les traitements supplementaires.
+\end{itemize}
+
+\section{Analyse des approches}
+
+Power Automate a ete utile pour orchestrer des traitements et automatiser des synchronisations. Son avantage principal est sa proximite avec l'ecosysteme Microsoft. Il permet de construire rapidement des flux declenches par un evenement, par exemple l'arrivee d'un nouveau document ou la modification d'un champ dans Power Apps.
+
+AI Builder a apporte une solution pratique pour extraire les champs depuis les factures et devis. Son interet est d'etre accessible dans une logique low-code et de s'integrer naturellement avec Dataverse. En revanche, la personnalisation fine, le controle des erreurs et les couts doivent etre surveilles.
+
+Azure Document Intelligence a ete etudie comme solution plus specialisee pour l'analyse documentaire. Elle offre une approche robuste pour les documents structures et semi-structures, mais son integration dans le pipeline global demandait plus d'effort technique.
+
+\section{Choix methodologique}
+
+La demarche adoptee a consiste a combiner les avantages des outils plutot qu'a chercher une solution unique. Power Automate a ete conserve pour l'orchestration et la synchronisation. AI Builder a ete utilise dans la logique d'extraction et de validation. La base Postgres Neon est devenue le point central pour stocker les donnees structurees, les statuts, les scores de confiance et les embeddings.
+
+Cette approche a permis de garder une solution comprehensible par les utilisateurs metier, tout en conservant une architecture suffisamment ouverte pour le RAG, le reporting et les traitements Python.

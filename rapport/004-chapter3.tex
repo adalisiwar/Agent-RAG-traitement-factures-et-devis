@@ -1,0 +1,35 @@
+\chapter{Realisation du pipeline IDP}
+\label{chap:realisation-pipeline-idp}
+
+\section{Vue d'ensemble des sprints 1 a 6}
+
+Les six premiers sprints ont ete consacres a la construction du pipeline IDP. L'objectif etait de passer d'un ensemble de factures et devis stockes dans un dossier dedie a une base de donnees exploitable par des recherches, des validations et des rapports.
+
+Le jeu documentaire contient 35 fichiers de test repartis en 17 factures et 18 devis. Les formats sont varies: PDF, JPG et PNG. Cette diversite a permis de tester le comportement du pipeline sur des documents numeriques et des documents images.
+
+\section{Extraction et validation}
+
+La premiere etape a consiste a extraire les champs essentiels: reference du document, fournisseur, client, date, montant total, lignes de document et statut. Les extractions ont ete accompagnees de scores de confiance, notamment \texttt{confiance\_montant} et \texttt{confiance\_fournisseur}. Ces valeurs permettent de distinguer un document traite avec assurance d'un document qui doit etre revu.
+
+Des controles d'anomalies ont ete ajoutes pour detecter les cas suspects. Par exemple, un montant incoherent ou une date absente ne doivent pas etre acceptes silencieusement. Le pipeline enregistre ces problemes afin de conserver une trace exploitable.
+
+\section{Modele de donnees Postgres}
+
+Les donnees extraites ont ete stockees dans une base Postgres hebergee sur Neon. Le modele comprend les tables principales suivantes:
+
+\begin{itemize}
+  \item \texttt{document}: informations generales sur les factures et devis.
+  \item \texttt{fournisseur}: donnees relatives aux emetteurs des documents.
+  \item \texttt{client}: informations client lorsqu'elles sont disponibles.
+  \item \texttt{statut}: suivi de l'etat de traitement et de paiement.
+  \item \texttt{ligne\_document}: detail des lignes de facture ou de devis.
+  \item \texttt{journal\_erreurs}: trace des erreurs d'extraction, d'insertion ou de validation.
+\end{itemize}
+
+Ce schema a ete pense pour separer les donnees metier, les informations de suivi et les erreurs. Cette separation facilite les requetes analytiques et les controles de qualite.
+
+\section{Embeddings et recherche hybride}
+
+Un second niveau de traitement a ete ajoute avec le script \texttt{embedding\_documents.py}. Le contenu textuel des documents est transforme en embeddings avec le modele \texttt{gemini-embedding-001}. Ces vecteurs sont stockes dans pgvector avec le type \texttt{VECTOR(1536)} dans la table \texttt{document\_embedding}, liee a \texttt{document} par \texttt{document\_id}.
+
+Le moteur de recherche a d'abord ete implemente dans \texttt{search\_embeddings.py}, puis refactorise dans \texttt{rag\_search.py}. Il combine une recherche vectorielle, une recherche full-text PostgreSQL et des filtres structures comme l'annee, le statut, le fournisseur ou le statut de paiement. Les resultats sont ensuite fusionnes avec RRF afin d'obtenir un classement plus fiable.

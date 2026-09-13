@@ -1,0 +1,12 @@
+\chapter*{Introduction}
+\label{chap:general_introduction}
+\markboth{\MakeUppercase{Introduction}}{}%
+\addcontentsline{toc}{chapter}{Introduction}%
+
+Les entreprises manipulent quotidiennement des documents administratifs dont le contenu est essentiel pour leur activite: factures, devis, bons de commande, informations fournisseurs, montants, taxes, dates d'echeance et statuts de paiement. Lorsque ces documents sont traites manuellement, chaque operation devient repetitive et sensible aux erreurs: lecture du fichier, saisie des champs, verification du montant, classement, puis recherche de l'information lorsque l'utilisateur en a besoin.
+
+Mon stage d'ete s'est deroule chez Dazzlifai autour du sujet suivant: \textit{Agent RAG pour l'automatisation du traitement et de la digitalisation des factures et devis}. L'objectif principal etait de concevoir une solution capable de recevoir un ensemble de factures et de devis, d'en extraire les donnees importantes, de les stocker dans une base structuree, puis de permettre une interrogation intelligente de ces informations.
+
+Le projet ne se limitait pas a une simple extraction de texte. Il s'agissait de construire un pipeline complet, depuis la digitalisation documentaire jusqu'a la generation de reponses fondees sur les donnees retrouvees. La solution devait donc combiner plusieurs briques: traitement intelligent de documents, base de donnees Postgres, embeddings vectoriels, recherche hybride, integration avec Microsoft Power Platform et generation de rapports.
+
+Ce rapport presente le travail realise pendant le stage. Le premier chapitre introduit les notions theoriques necessaires, notamment l'IDP et le RAG. Le deuxieme chapitre decrit la demarche de comparaison entre Power Automate, AI Builder et Azure Document Intelligence. Les chapitres suivants presentent la realisation sprint par sprint, les difficultes rencontrees, les resultats obtenus, les limites identifiees et enfin les apprentissages personnels tires de cette experience.

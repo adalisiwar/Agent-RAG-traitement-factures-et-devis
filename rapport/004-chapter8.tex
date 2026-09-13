@@ -1,0 +1,18 @@
+\chapter{Limites identifiees et recommandations}
+\label{chap:limites-recommandations}
+
+\section{Limites}
+
+La premiere limite concerne la qualite variable des documents. Une facture claire au format PDF donne de meilleurs resultats qu'une image floue, mal cadree ou partiellement lisible. Le pipeline doit donc conserver une validation humaine pour les documents dont les scores de confiance sont faibles.
+
+La deuxieme limite est liee aux services externes. Les quotas Gemini, la depreciation d'un modele ou les changements d'API peuvent affecter le fonctionnement de l'agent. Meme si le code a ete modularise, une solution de production doit prevoir une surveillance continue de ces dependances.
+
+Une autre limite concerne l'integration Power Platform. Dataverse et Power Automate sont puissants pour creer rapidement une interface metier, mais ils imposent leurs propres contraintes: types de colonnes, formats OData, permissions et precision monetaire.
+
+\section{Recommandations}
+
+Pour industrialiser le projet, il serait utile d'ajouter un tableau de bord de supervision. Celui-ci pourrait afficher le nombre de documents traites, les erreurs recentes, les documents en attente de validation et les appels LLM consommes.
+
+Il serait egalement pertinent de renforcer la validation metier. Par exemple, un document avec un montant tres eleve, une date incoherente ou un fournisseur inconnu pourrait etre automatiquement place dans un statut de revue.
+
+Enfin, l'agent RAG gagnerait a integrer une gestion plus precise des sources citees. Chaque reponse pourrait afficher les documents utilises, les champs consultes et le score de pertinence. Cette transparence est importante pour etablir la confiance dans un outil qui manipule des informations financieres.

@@ -1,0 +1,33 @@
+\appendix
+\chapter{Annexes techniques}
+\label{chap:appendix}
+
+\section{Organisation du jeu documentaire}
+
+Le jeu de documents est stocke dans le dossier \texttt{Dossier\_Test\_AI\_Builder}. Il est organise en deux sous-dossiers principaux: \texttt{Factures} et \texttt{Devis}. Un fichier descriptif accompagne le dossier afin d'indiquer le role de chaque document de test.
+
+\section{Principales tables de la base}
+
+Les tables utilisees dans la base Postgres sont:
+
+\begin{itemize}
+  \item \texttt{document}
+  \item \texttt{fournisseur}
+  \item \texttt{client}
+  \item \texttt{statut}
+  \item \texttt{ligne\_document}
+  \item \texttt{journal\_erreurs}
+  \item \texttt{document\_embedding}
+\end{itemize}
+
+\section{Modules Python}
+
+Les principaux modules du sprint final sont:
+
+\begin{itemize}
+  \item \texttt{db\_utils.py}: connexion et resilience Postgres.
+  \item \texttt{llm\_utils.py}: appels Gemini, retry et backoff.
+  \item \texttt{rag\_search.py}: recherche hybride et filtres.
+  \item \texttt{rag\_reporting.py}: generation de rapports.
+  \item \texttt{rag\_agent.py}: orchestration de l'agent.
+\end{itemize}
