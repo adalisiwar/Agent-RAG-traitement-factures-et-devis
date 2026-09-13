@@ -1,4 +1,10 @@
 .env
-.venv
-.vscode
-.agents
+.venv/
+.vscode/
+.agents/
+__pycache__/
+*.pyc
+
+# Large media / presentation files
+*.mp4
+sprint_review/sprint_3/Suivi_Sprint3_Agent_RAG.pptx
